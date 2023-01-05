@@ -1,0 +1,254 @@
+---
+title: "FINAL PROJECT"
+author: "Pooja pravinbabu"
+date: "4 May 2017"
+output: pdf_document
+---
+
+##TITLE:
+UNEMPLOYMENT VS INFLATION
+
+##DATA SET DESCRIPTION:
+Two different data sets were used to find the correlation between unemployment and inflation rate for six countries (USA, Japan, France, Italy, Poland, Norway) and for 14 years (2001 to 2014). The unemployment rate was taken from ‘Harmonised unemployment rate dataset (HUR)’. HUR means “the unemployed as people of working age who are without work, are available for work, and have taken specific steps to find work”(“Unemployment - Harmonised unemployment rate (HUR) - OECD Data,” n.d.). Unemployment rate is the measure of percentage of labour force. The labour force is “the total number of unemployed people plus those in civilian employment”(“Unemployment - Harmonised unemployment rate (HUR) - OECD Data,” n.d.). Inflation measured by consumer price index (CPI) and was taken from ‘Inflation (CPI) dataset’. CPI is “the change in the prices of a basket of goods and services that are typically purchased by specific groups of households”(“Prices - Inflation (CPI) - OECD Data,” n.d.). The unemployment and inflation rates for these countries and years were filtered from those two data sets. The filtered values of unemployment and inflation rates were merged in a single data set and was used to plot the correlation.
+
+
+##VISUALIZATION AND ANALYSIS
+Phillips in late 1950’s, noticed a correlation between unemployment and inflation rates of USA. He noticed a negative correlation between unemployment and inflation. That is he noted an inverse relationship. At high inflation rate, the unemployment rate will be low. I wanted to see whether there is this type of correlation in other countries also. It would be easier to see the difference in the correlation between these two variables of different countries if they are faceted. Also the correlation can be visually seen only through best fit line in the graph. To draw best fit line, scatter plot would be the apt plot. Thus, scatter plot with best fit line was made for all the countries and were faceted (Figure 1). 
+
+Spearman correlation is used to find the correlation (monotonic relationship) as these are continuous variables. The assumption made was that every country will not show Phillips curve. This assumption was made because unemployment does not cause inflation in a country. There are many other factors along with unemployment causes inflation. From figure 2 it is clear that USA shows a correlation and it is negative correlation. Also the correlation coefficient (R) is -0.488. Thus, this is Phillips curve. Form figure 3 also it is clear that Japan shows a correlation and it is negative correlation (inverse relation). Also the correlation coefficient (R) is -0.751. From figure 4 also it is clear that France shows a correlation and it is negative correlation (inverse relation). Also the correlation coefficient (R) is -0.435. Thus, all these countries (USA, Japan, France) show Phillips curve. From figure 5 it is clear that there is correlation but there is no negative linear correlation. Also the correlation coefficient is -0.062. So, Italy does not show Phillips curve. Figure 6 shows that there is no negative linear correlation and also the correlation coefficient is -0.239. So, Poland does not show Phillips curve. Figure 7 shows that there is no negative linear correlation and also the correlation coefficient is -0.127. So, Norway does not show Phillips curve. Thus, all these countries (Italy, Poland, Norway) do not show Phillips curve.
+
+ 
+![Unemployment vs Inflation.](/home/student/R scripts/ALL_COUNTRIES.png)
+
+
+![USA_Unemployment vs Inflation.](/home/student/R scripts/USA.png)
+
+
+![JAPAN_Unemployment vs Inflation.](/home/student/R scripts/JAPAN.png)
+
+
+![FRANCE_Unemployment vs Inflation.](/home/student/R scripts/FRANCE.png)
+
+
+![ITALY_Unemployment vs Inflation.](/home/student/R scripts/ITALY.png)
+
+
+![POLAND_Unemployment vs Inflation.](/home/student/R scripts/POLAND.png)
+
+
+![NORWAY_Unemployment vs Inflation.](/home/student/R scripts/NORWAY.png)
+
+##REFLECTION
+Correlation can be seen in between any two independent random variables. For example between chocolate sales and crime rates. However, I was very impressed when I first came to know about Phillips curve. Eventhough there are many factors other than high unemployment which brings down inflation rates, he found a negative correlation between inflation rate and unemployment rate of USA. Because due to huge technological improvement the prices of goods and services might not go up in that country. That is even if there is very less unemployment rate, due to technological improvement, the inflation rates might not go up. This leads to stagflation in a country. Stagflation is high levels of both inflation and unemployment (wikipedia). However, still the inverse relation between inflation rate and unemployment rate in USA, which Phillips have observed might be due to very less contribution of other factors such as technological improvement. But that is surprising. Thus for a long time, I wanted to see whether there is this type of correlation in many other countries. I thought this inverse relationship between inflation rates and unemployment rates will not be found in Japan, as there is huge technological improvement. However, there is a pretty strong negative correlation in Japan. This is even more surprising. I took six countries, in that three major countries (USA, Japan, France) shows Phillips curve. Now, I am eager to know what is the reason for this relationship. One of the major problems which I came across while doing this project is finding a relevant data. Because, I need both inflation and unemployment rates in percentage. It took a huge amount of time for me to find the  harmonized unemployment rate dataset, as it gives unemployment rate percentage. Another problem is while thinking how to make the graphs visually attractive. I went through many ggplot functions and tried many of them to see which makes the graph more attractive. Another problem is to know whether the minimum requirement for visual attractiveness is achieved or not. Searching the apt dataset and aesthetics part of the project took more time. I want to do this correlation for even many more countries. However for now I am pretty satisfied with my project. But, I still want to think about what kind of visualization can be used to represent this for many countries even more effectivelly other than faceting to describe this correlation. Bringing both statistical inference and visualization in the same graph is very hard part. If the graph is visually attractive then it is very hard to bring statistical inference into that graph. This was also a challenging part in the project. But, it can be done and it will be very informative and attractive. If you had to make the project more elaborate,I would have try to see this correlation for many more countries and also for many different range of years. I would have also tried to make it more and more attractive. Another thing which I could do is finding a way to find P-value for this linear relationship.
+
+##REFERENCES
+OECD (2017), Harmonised unemployment rate (HUR) (indicator). doi: 10.1787/52570002-en (Accessed on 05 May 2017)
+
+Wikipedia contributors. "Phillips curve." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 29 Apr. 2017. Web. 5 May. 2017.
+
+OECD (2017), Inflation (CPI) (indicator). doi: 10.1787/eee82e6e-en (Accessed on 05 May 2017)
+
+##APPENDIX
+```{r message=F,comment=NA,warning=F}
+inflation=read.csv("/home/student/R scripts/data searching/inflation.csv",
+                   stringsAsFactors = F)
+unemployment=read.csv("/home/student/R scripts/data searching/unemployment.csv",
+                      stringsAsFactors = F)
+library(dplyr)
+library(ggplot2)
+
+#To get year from 2001 to 2014 in a vector with months.
+time=inflation$TIME[10:9784]
+time_s=unique(time)
+time_sm=time_s[1:168]
+
+#Making data frame with inflation and unemployment rates for USA 
+trimmed_inflation_USA=inflation%>%filter(LOCATION=="USA")%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_USA=unemployment%>%filter(LOCATION=="USA")%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_USA=cbind(trimmed_inflation_USA,
+                                 trimmed_unemployment_USA,
+                                 country=rep("USA",168))
+#finding correlation
+USA_COR=round(cor(inflation_unemployment_USA$VALUE_U,
+                  inflation_unemployment_USA$VALUE_I,method = "spearman"),
+              digits = 3)
+#plotting
+USA=ggplot(inflation_unemployment_USA,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=5, y=-1, label=paste0("R=",USA_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+
+#Making data frame with inflation and unemployment rates for Japan
+trimmed_inflation_JAPAN=inflation%>%
+  filter(LOCATION== "JPN" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_JAPAN=unemployment%>%
+  filter(LOCATION== "JPN" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_JAPAN=cbind(trimmed_inflation_JAPAN,
+                                   trimmed_unemployment_JAPAN,
+                                   country=rep("JAPAN",168))
+#finding correlation
+JAPAN_COR=round(cor(inflation_unemployment_JAPAN$VALUE_U,
+                    inflation_unemployment_JAPAN$VALUE_I,method = "spearman"),
+                digits = 3)
+# plotting
+JAPAN=ggplot(inflation_unemployment_JAPAN,
+       aes(VALUE_U,VALUE_I))+geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=3.7, y=-1.5, label=paste0("R=",JAPAN_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+#Making data frame with inflation and unemployment rates for France
+trimmed_inflation_france=inflation%>%filter(LOCATION=="FRA")%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_france=unemployment%>%filter(LOCATION=="FRA")%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_france=cbind(trimmed_inflation_france,
+                                    trimmed_unemployment_france,
+                                    country=rep("FRANCE",168))
+#finding correlation
+FRANCE_COR=round(cor(inflation_unemployment_france$VALUE_U,
+                     inflation_unemployment_france$VALUE_I,method = "spearman"),
+                 digits = 3)
+#plotting
+FRANCE=ggplot(inflation_unemployment_france,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=7.8, y=0, label=paste0("R=",FRANCE_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+
+
+#Making data frame with inflation and unemployment rates for Italy
+trimmed_inflation_ITALY=inflation%>%filter(LOCATION== "ITA" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_ITALY=unemployment%>%filter(LOCATION== "ITA" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_ITALY=cbind(trimmed_inflation_ITALY,
+                                   trimmed_unemployment_ITALY,
+                                   country=rep("ITALY",168))
+#finding correlation
+ITALY_COR=round(cor(inflation_unemployment_ITALY$VALUE_U,
+                    inflation_unemployment_ITALY$VALUE_I,method = "spearman"),
+                digits = 3)
+#plotting
+ITALY=ggplot(inflation_unemployment_ITALY,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("ITALY_UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=6.5, y=0.5, label=paste0("R=",ITALY_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+#Making data frame with inflation and unemployment rates for Poland
+trimmed_inflation_poland=inflation%>%filter(LOCATION=="POL")%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_poland=unemployment%>%
+  filter(LOCATION=="POL")%>%filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_poland=cbind(trimmed_inflation_poland,
+                                    trimmed_unemployment_poland,
+                                    country=rep("POLAND",168))
+#finding correlation
+POLAND_COR=round(cor(inflation_unemployment_poland$VALUE_U,
+                     inflation_unemployment_poland$VALUE_I,method = "spearman"),
+                 digits = 3)
+#ploting
+POLAND=ggplot(inflation_unemployment_poland,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=7, y=0, label=paste0("R=",POLAND_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+
+#Making data frame with inflation and unemployment rates for Norway
+trimmed_inflation_norway=inflation%>%filter(LOCATION== "NOR" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_I=Value)
+trimmed_unemployment_norway=unemployment%>%filter(LOCATION== "NOR" )%>%
+  filter(TIME%in%time_sm)%>%select(VALUE_U=Value)
+inflation_unemployment_norway=cbind(trimmed_inflation_norway,
+                                    trimmed_unemployment_norway,
+                                    country=rep("NORWAY",168))
+#finding correlation
+NORWAY_COR=round(cor(inflation_unemployment_norway$VALUE_U,
+                     inflation_unemployment_norway$VALUE_I,method = "spearman"),
+                 digits = 3)
+#ploting
+NORWAY=ggplot(inflation_unemployment_norway,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+
+  annotate("text", x=4.5, y=-1, label=paste0("R=",NORWAY_COR),fontface="bold",
+           color="red2",size=5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey40",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+
+
+
+
+#Making data frame with inflation and unemployment rates for all six countries
+
+inflation_unemployment_allcountries=rbind(inflation_unemployment_USA,
+                                          inflation_unemployment_JAPAN,
+                                          inflation_unemployment_france,
+                                          inflation_unemployment_ITALY,
+                                          inflation_unemployment_poland,
+                                          inflation_unemployment_norway)
+#ploting for all six countries
+ALL_COUNTRIES=ggplot(inflation_unemployment_allcountries,aes(VALUE_U,VALUE_I))+
+  geom_point(color="mediumpurple4")+
+  geom_smooth(method = lm,se=F,color="red2")+
+  xlab("UNEMPLOYMENT RATE %")+ylab("INFLATION RATE %")+facet_wrap(~country)+
+  geom_text(data=data.frame(label=c(paste0("R=",USA_COR),paste0("R=",JAPAN_COR),
+                                    paste0("R=",FRANCE_COR),paste0("R=",ITALY_COR),
+                                    paste0("R=",POLAND_COR),paste0("R=",NORWAY_COR)), 
+                            country=c("USA","JAPAN","FRANCE","ITALY",
+                                      "POLAND","NORWAY")), 
+          aes(x=18, y=-1,label=label), inherit.aes=FALSE,
+          fontface="bold",color="red2",size=4.5)+
+  theme(axis.text.x=element_text(size=12),axis.text.y=element_text(size=12),
+        axis.title=element_text(size=12,face="bold"),
+        plot.title = element_text(size=14,face="bold",color="darkblue"),
+        panel.background = element_rect(fill = "white", colour = "grey50",size=3),
+        panel.grid.major = element_line(colour = "grey80"))
+
+
+```
+
+
